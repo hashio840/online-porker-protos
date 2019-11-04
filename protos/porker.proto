@@ -1,0 +1,146 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.porker";
+option java_outer_classname = "Porker";
+
+package porker;
+
+service Porker {
+  rpc SignUp (SignUpRequest) returns (SignUpResponse) {}
+  rpc ChangeName (ChangeNameRequest) returns (ChangeNameResponse) {}
+  rpc SignIn (SignInRequest) returns (SignInResponse) {}
+  rpc Join (JoinRequest) returns (JoinResponse) {}
+  rpc Start (StartRequest) returns (StartResponse) {}
+  rpc Change (ChangeRequest) returns (ChangeResponse) {}
+  rpc Open (OpenRequest) returns (OpenResponse) {}
+  rpc End (EndRequest) returns (EndResponse) {}
+  rpc Draw (DrawRequest) returns (DrawResponse) {}
+}
+
+message SignUpRequest {
+  string name = 1;	
+}
+
+message SignUpResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ChangeNameRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message ChangeNameResponse {
+}
+
+message SignInRequest {
+  string id = 1;
+}
+message SignInResponse {
+  string key = 1;
+  string name = 2; // might be other request for profiling
+}
+
+message JoinRequest {
+}
+message JoinResponse {
+  string room_id = 1;
+  string room_name = 2;
+  int64 player_turn = 3;
+  repeated Player players = 4;
+}
+
+message Player {
+  int64 turn = 1;
+  string name = 2;
+}
+
+message StartRequest {
+  string room_id = 1;
+}
+
+message StartResponse {
+  int64 turn = 1;
+  int64 card_number = 2;
+  repeated Card cards = 3;
+}
+
+message Card {
+  enum Mark {
+    MARK_CLUB = 0;
+    MARK_DIAMOND = 1;
+    MARK_HEART = 2;
+    MARK_SPADE = 3;
+  }
+
+  int64 number = 1;
+  Mark mark = 2;
+}
+
+message ChangeRequest {
+  string room_id = 1;
+  repeated Card cards = 2;   
+}
+
+message ChangeResponse {
+  repeated Card cards = 1;
+}
+
+message DrawRequest {
+  string room_id = 1;
+  int64 turn = 2;
+}
+
+message DrawResponse {
+  repeated Card cards = 1;
+}
+
+message OpenRequest {
+  string room_id = 1;
+}
+
+message OpenResponse {
+  repeated PlayerResult pr = 1;
+}
+
+message PlayerResult {
+  enum HAND {
+    HAND_HIGH = 0;
+    HAND_PAIR = 1;
+    HAND_TWO_PAIR = 2;
+    HAND_THREE = 3;
+    HAND_STRAIGHT = 4;
+    HAND_FLUSH = 5;
+    HAND_FULL_HOUSE = 6;
+    HAND_FOUR = 7;
+    HAND_STRAIGHT_FLUSH = 8;
+  }
+
+  int64 turn = 1;
+  repeated Card cards = 2;
+  HAND hand = 3;
+  int64 rank = 4;
+}
+
+message EndRequest {
+  bool is_end = 1;
+}
+
+message EndResponse {
+}
