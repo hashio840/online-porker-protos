@@ -143,7 +143,8 @@ message PlayerResult {
 }
 
 message EndRequest {
-  bool is_end = 1;
+  string game_id = 1;
+  bool is_end = 2;
 }
 
 message EndResponse {

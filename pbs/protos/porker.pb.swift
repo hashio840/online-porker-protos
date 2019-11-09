@@ -417,6 +417,8 @@ struct Porker_EndRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var gameID: String = String()
+
   var isEnd: Bool = false
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -1109,26 +1111,32 @@ extension Porker_PlayerResult.HAND: SwiftProtobuf._ProtoNameProviding {
 extension Porker_EndRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".EndRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "is_end"),
+    1: .standard(proto: "game_id"),
+    2: .standard(proto: "is_end"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularBoolField(value: &self.isEnd)
+      case 1: try decoder.decodeSingularStringField(value: &self.gameID)
+      case 2: try decoder.decodeSingularBoolField(value: &self.isEnd)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.gameID.isEmpty {
+      try visitor.visitSingularStringField(value: self.gameID, fieldNumber: 1)
+    }
     if self.isEnd != false {
-      try visitor.visitSingularBoolField(value: self.isEnd, fieldNumber: 1)
+      try visitor.visitSingularBoolField(value: self.isEnd, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Porker_EndRequest, rhs: Porker_EndRequest) -> Bool {
+    if lhs.gameID != rhs.gameID {return false}
     if lhs.isEnd != rhs.isEnd {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
