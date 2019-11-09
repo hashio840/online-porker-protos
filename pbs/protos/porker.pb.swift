@@ -169,6 +169,8 @@ struct Porker_StartResponse {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  var gameID: String = String()
+
   var turn: Int64 = 0
 
   var cardNumber: Int64 = 0
@@ -249,6 +251,8 @@ struct Porker_ChangeRequest {
 
   var roomID: String = String()
 
+  var gameID: String = String()
+
   var cards: [Porker_Card] = []
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -275,6 +279,8 @@ struct Porker_DrawRequest {
 
   var roomID: String = String()
 
+  var gameID: String = String()
+
   var turn: Int64 = 0
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
@@ -300,6 +306,8 @@ struct Porker_OpenRequest {
   // methods supported on all messages.
 
   var roomID: String = String()
+
+  var gameID: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -745,36 +753,42 @@ extension Porker_StartRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 extension Porker_StartResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".StartResponse"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "turn"),
-    2: .standard(proto: "card_number"),
-    3: .same(proto: "cards"),
+    1: .standard(proto: "game_id"),
+    2: .same(proto: "turn"),
+    3: .standard(proto: "card_number"),
+    4: .same(proto: "cards"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
-      case 1: try decoder.decodeSingularInt64Field(value: &self.turn)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.cardNumber)
-      case 3: try decoder.decodeRepeatedMessageField(value: &self.cards)
+      case 1: try decoder.decodeSingularStringField(value: &self.gameID)
+      case 2: try decoder.decodeSingularInt64Field(value: &self.turn)
+      case 3: try decoder.decodeSingularInt64Field(value: &self.cardNumber)
+      case 4: try decoder.decodeRepeatedMessageField(value: &self.cards)
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.gameID.isEmpty {
+      try visitor.visitSingularStringField(value: self.gameID, fieldNumber: 1)
+    }
     if self.turn != 0 {
-      try visitor.visitSingularInt64Field(value: self.turn, fieldNumber: 1)
+      try visitor.visitSingularInt64Field(value: self.turn, fieldNumber: 2)
     }
     if self.cardNumber != 0 {
-      try visitor.visitSingularInt64Field(value: self.cardNumber, fieldNumber: 2)
+      try visitor.visitSingularInt64Field(value: self.cardNumber, fieldNumber: 3)
     }
     if !self.cards.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.cards, fieldNumber: 3)
+      try visitor.visitRepeatedMessageField(value: self.cards, fieldNumber: 4)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Porker_StartResponse, rhs: Porker_StartResponse) -> Bool {
+    if lhs.gameID != rhs.gameID {return false}
     if lhs.turn != rhs.turn {return false}
     if lhs.cardNumber != rhs.cardNumber {return false}
     if lhs.cards != rhs.cards {return false}
@@ -831,14 +845,16 @@ extension Porker_ChangeRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   static let protoMessageName: String = _protobuf_package + ".ChangeRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "room_id"),
-    2: .same(proto: "cards"),
+    2: .standard(proto: "game_id"),
+    3: .same(proto: "cards"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.roomID)
-      case 2: try decoder.decodeRepeatedMessageField(value: &self.cards)
+      case 2: try decoder.decodeSingularStringField(value: &self.gameID)
+      case 3: try decoder.decodeRepeatedMessageField(value: &self.cards)
       default: break
       }
     }
@@ -848,14 +864,18 @@ extension Porker_ChangeRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if !self.roomID.isEmpty {
       try visitor.visitSingularStringField(value: self.roomID, fieldNumber: 1)
     }
+    if !self.gameID.isEmpty {
+      try visitor.visitSingularStringField(value: self.gameID, fieldNumber: 2)
+    }
     if !self.cards.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.cards, fieldNumber: 2)
+      try visitor.visitRepeatedMessageField(value: self.cards, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Porker_ChangeRequest, rhs: Porker_ChangeRequest) -> Bool {
     if lhs.roomID != rhs.roomID {return false}
+    if lhs.gameID != rhs.gameID {return false}
     if lhs.cards != rhs.cards {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -895,14 +915,16 @@ extension Porker_DrawRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   static let protoMessageName: String = _protobuf_package + ".DrawRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "room_id"),
-    2: .same(proto: "turn"),
+    2: .standard(proto: "game_id"),
+    3: .same(proto: "turn"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.roomID)
-      case 2: try decoder.decodeSingularInt64Field(value: &self.turn)
+      case 2: try decoder.decodeSingularStringField(value: &self.gameID)
+      case 3: try decoder.decodeSingularInt64Field(value: &self.turn)
       default: break
       }
     }
@@ -912,14 +934,18 @@ extension Porker_DrawRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if !self.roomID.isEmpty {
       try visitor.visitSingularStringField(value: self.roomID, fieldNumber: 1)
     }
+    if !self.gameID.isEmpty {
+      try visitor.visitSingularStringField(value: self.gameID, fieldNumber: 2)
+    }
     if self.turn != 0 {
-      try visitor.visitSingularInt64Field(value: self.turn, fieldNumber: 2)
+      try visitor.visitSingularInt64Field(value: self.turn, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Porker_DrawRequest, rhs: Porker_DrawRequest) -> Bool {
     if lhs.roomID != rhs.roomID {return false}
+    if lhs.gameID != rhs.gameID {return false}
     if lhs.turn != rhs.turn {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -959,12 +985,14 @@ extension Porker_OpenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   static let protoMessageName: String = _protobuf_package + ".OpenRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "room_id"),
+    2: .standard(proto: "game_id"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
       switch fieldNumber {
       case 1: try decoder.decodeSingularStringField(value: &self.roomID)
+      case 2: try decoder.decodeSingularStringField(value: &self.gameID)
       default: break
       }
     }
@@ -974,11 +1002,15 @@ extension Porker_OpenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
     if !self.roomID.isEmpty {
       try visitor.visitSingularStringField(value: self.roomID, fieldNumber: 1)
     }
+    if !self.gameID.isEmpty {
+      try visitor.visitSingularStringField(value: self.gameID, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   static func ==(lhs: Porker_OpenRequest, rhs: Porker_OpenRequest) -> Bool {
     if lhs.roomID != rhs.roomID {return false}
+    if lhs.gameID != rhs.gameID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

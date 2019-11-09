@@ -76,9 +76,10 @@ message StartRequest {
 }
 
 message StartResponse {
-  int64 turn = 1;
-  int64 card_number = 2;
-  repeated Card cards = 3;
+  string game_id = 1;
+  int64 turn = 2;
+  int64 card_number = 3;
+  repeated Card cards = 4;
 }
 
 message Card {
@@ -95,7 +96,8 @@ message Card {
 
 message ChangeRequest {
   string room_id = 1;
-  repeated Card cards = 2;   
+  string game_id = 2;
+  repeated Card cards = 3;
 }
 
 message ChangeResponse {
@@ -104,7 +106,8 @@ message ChangeResponse {
 
 message DrawRequest {
   string room_id = 1;
-  int64 turn = 2;
+  string game_id = 2;
+  int64 turn = 3;
 }
 
 message DrawResponse {
@@ -113,6 +116,7 @@ message DrawResponse {
 
 message OpenRequest {
   string room_id = 1;
+  string game_id = 2;
 }
 
 message OpenResponse {
